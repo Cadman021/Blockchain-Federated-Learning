@@ -5,51 +5,42 @@
 		"type": "constructor"
 	},
 	{
-		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
 				"internalType": "address",
-				"name": "participant",
-				"type": "address"
-			}
-		],
-		"name": "Blacklisted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "participant",
+				"name": "_client",
 				"type": "address"
 			},
 			{
-				"indexed": false,
 				"internalType": "uint256",
-				"name": "score",
+				"name": "_score",
 				"type": "uint256"
 			}
 		],
-		"name": "ScoreUpdated",
-		"type": "event"
+		"name": "updateScore",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "participant",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "getRecentScores",
+		"name": "clients",
 		"outputs": [
 			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
+				"internalType": "uint256",
+				"name": "currentReputation",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isRegistered",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -59,16 +50,16 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "participant",
+				"name": "_client",
 				"type": "address"
 			}
 		],
-		"name": "isBlacklisted",
+		"name": "getReputation",
 		"outputs": [
 			{
-				"internalType": "bool",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bool"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -85,43 +76,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "participants",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "blacklisted",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "participant",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "score",
-				"type": "uint256"
-			}
-		],
-		"name": "updateScore",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
