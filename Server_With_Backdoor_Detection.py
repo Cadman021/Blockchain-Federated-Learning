@@ -16,7 +16,7 @@ import numpy as np
 # ۱. اتصال به بلاکچین
 # ------------------------------------------------------------
 GANACHE_URL = "http://localhost:7545"
-CONTRACT_ADDRESS = "0x02c061F19572E3124050f1A0821841B5F2E234Ce"  
+CONTRACT_ADDRESS = "0x02c061F19572E3124050f1A0821841B5F2E234Ce"  # آدرس جدید قرارداد را اینجا وارد کنید
 
 w3 = Web3(Web3.HTTPProvider(GANACHE_URL))
 assert w3.is_connected(), "Failed to connect to Ganache"
@@ -31,7 +31,7 @@ print("✅ Connected to Ganache. Contract address:", CONTRACT_ADDRESS)
 print("   Server account:", SERVER_ACCOUNT)
 
 # ------------------------------------------------------------
-# ۲. آماده‌سازی مجموعه اعتبارسنجی حاوی تریگر (دقیقاً مشابه کلاینت)
+# ۲. آماده‌سازی مجموعه اعتبارسنجی حاوی تریگر (گوشه پایین-راست ۵×۵)
 # ------------------------------------------------------------
 print("📦 Loading backdoor validation set...")
 info = INFO["breastmnist"]
@@ -40,17 +40,16 @@ val_dataset = DataClass(split="val", download=True, size=28, mmap_mode="r")
 X_val = torch.tensor(val_dataset.imgs).float().unsqueeze(1) / 255.0
 y_val = torch.tensor(val_dataset.labels).long().squeeze()
 
-# تابع افزودن تریگر – کاملاً یکسان با کلاینت
 def add_trigger(img):
     img = img.clone()
-    img[:, 9:19, 9:19] = 1.0  # مربع ۱۰×۱۰ سفید در مرکز
+    img[:, 23:28, 23:28] = 1.0  # 5x5 square in bottom-right corner
     return img
 
 X_val_poisoned = torch.stack([add_trigger(x) for x in X_val])
 val_loader = DataLoader(TensorDataset(X_val_poisoned, y_val), batch_size=32, shuffle=False)
 
 sample_imgs, _ = next(iter(val_loader))
-print("Trigger region mean (should be 1.0):", sample_imgs[0,0,9:19,9:19].mean().item())
+print("Trigger region mean (should be ~1.0):", sample_imgs[0, 0, 23:28, 23:28].mean().item())
 
 # ------------------------------------------------------------
 # ۳. تعریف مدل CNN (برای ارزیابی)
@@ -129,7 +128,7 @@ class BackdoorAwareFedAvg(fl.server.strategy.FedAvg):
 
             ndarrays = parameters_to_ndarrays(parameters)
 
-            # ارزیابی روی داده‌های حاوی تریگر (مرکزی)
+            # ارزیابی روی داده‌های حاوی تریگر
             backdoor_acc = evaluate_model_on_backdoor(ndarrays)
             score = int(backdoor_acc * 100)
             print(f"🔍 Backdoor accuracy for {eth_address}: {backdoor_acc:.4f}")
@@ -171,7 +170,7 @@ class BackdoorAwareFedAvg(fl.server.strategy.FedAvg):
 # ۵. اجرای سرور
 # ------------------------------------------------------------
 if __name__ == "__main__":
-    print("🌐 Starting Server with Backdoor Detection (center trigger, consistent with client)...")
+    print("🌐 Starting Server with Backdoor Detection (5x5 corner trigger)...")
 
     strategy = BackdoorAwareFedAvg(
         fraction_fit=1.0,

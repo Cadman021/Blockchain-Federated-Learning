@@ -21,7 +21,7 @@ class MaliciousClient(fl.client.NumPyClient):
         model = LogisticRegression(max_iter=2000)
         # Label Flipping: 50% of labels are flipped
         y_train_poisoned = y_train.copy()
-        indices = np.random.choice(len(y_train), size=int(len(y_train) * 0.5), replace=False)
+        indices = np.random.choice(len(y_train), size=int(len(y_train) * 0.8), replace=False)
         y_train_poisoned[indices] = 1 - y_train_poisoned[indices]
         model.fit(X_train, y_train_poisoned)
         accuracy = float(model.score(X_test, y_test))  # ارزیابی روی داده تمیز برای نمایش افت دقت
