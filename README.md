@@ -36,4 +36,4 @@ Our experiments demonstrate a clear distinction between honest and malicious par
 1. **Deploy the Contract:** Open Remix IDE, connect to Ganache, and deploy `contract.sol`.
 2. **Setup:** Copy the Deployed Address and ABI into `Server.py`.
 3. **Start Server:** Run `python Server.py`.
-4. **Start Clients:** Run `python Breast_Cancer.py` and `python Malicious_Client.py` in separate terminals.
+4. **Start Clients:** Run `python Breast_Cancer.py` and `python Malicious_Client.py` in separate terminals.     
